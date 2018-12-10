@@ -6,6 +6,7 @@ import CourseIndex from './views/CourseIndex.vue'
 import CreateUser from './views/CreateUser.vue'
 import Signup from './views/Signup.vue'
 import Login from './views/Login.vue'
+import Leaderboards from './views/Leaderboards.vue'
 
 Vue.use(Router)
 
@@ -40,6 +41,11 @@ export default new Router({
       path: '/login',
       name: 'login',
       component: Login
+    },
+    {
+      path: '/leaderboards',
+      name: 'leaderboards',
+      component: Leaderboards
     },
     {
       path: '/about',

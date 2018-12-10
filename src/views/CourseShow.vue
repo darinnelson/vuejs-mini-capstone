@@ -1,10 +1,10 @@
 <template>
   <div class="home">
-    <div v-for="expression in mixedExpressions">
-      <div v-if="expression.hidden===true">
-        <h2>{{ expression.english }}</h2>
+    <div v-for="mixedExpression in mixedExpressions">
+      <div v-if="mixedExpression.hidden===true">
+        <h2>{{ mixedExpression.english }}</h2>
         <input type="text" v-model="attempt">
-        <div><input type="submit" value="Check" v-on:click='checkAnswer(expression.spanish)'></div>
+        <div><input type="submit" value="Check" v-on:click='checkAnswer(mixedExpression.spanish, mixedExpression)'></div>
       </div>
     </div>
     <div v-if="next_hidden===true">
@@ -35,32 +35,27 @@ export default {
       next_hidden: false,
       expressions: [],
       mixedExpressions: [],
-      expressions_length: 0
+      expressions_length: 0,
+      tempArray: []
     };
   },
   created: function() {
     axios.get("http://localhost:3000/api/courses/" + this.$route.params.name).then(
       function(response) {
-        console.log(response.data);
         this.current = 0;
         this.correct = 0;
         this.attempted = 0;
         this.course = response.data;
         this.expressions = this.course.expressions;
-        this.mixedExpressions = this.shuff(this.expressions).slice(0,2);
+        this.mixedExpressions = this.shuff(this.expressions).slice(0,3);
         this.mixedExpressions[this.current].hidden = true;
         this.expressions_length = this.mixedExpressions.length;
-
-        // var expressions = [];
-        // this.course.expressions.forEach(function(courseExpression) {
-        //   expressions.push(courseExpression); 
-        // });
-        // var mixedEpressions = shuff(expressions);
-        // this.expressions_length = this.course.expressions.length;
       }.bind(this));
   },
+
   methods: {
-    checkAnswer: function(answer) {
+    checkAnswer: function(answer, currentExpression) {
+  
       this.attempted += 1;
       axios.post("http://localhost:3000/increase_global_attempted");
       axios.post("http://localhost:3000/increase_local_attempted/" + this.course.id);
@@ -69,27 +64,49 @@ export default {
         alert("Correct");
         axios.post("http://localhost:3000/increase_global_xp");
         axios.post("http://localhost:3000/increase_local_xp/" + this.course.id);
+        this.mixedExpressions[this.current].correct = true;
       } else {
-        alert("You are trash. The correct answer is: " + answer);
+        alert("You're garbage you noob. The correct answer is: " + answer);
+        this.tempArray.push(currentExpression);
       }
+
       this.attempt = "";
-      this.expressions[this.current].hidden = false;
+      this.mixedExpressions[this.current].hidden = false;
       this.current += 1;
-      if (this.current < this.expressions_length) {
-        this.expressions[this.current].hidden = true;
-      } else {
-        // this.expressions[0].hidden = true;
-        this.next_hidden = true;
-        this.current = 0;
-        console.log(this.course.name);
-        alert("Results: " + Math.round((this.correct / this.attempted) * 100).toFixed(0) + "%");
-        // this.$router.push("/courses");
+
+      for (var i = this.current; i < this.mixedExpressions.length; i++) {
+        if (this.mixedExpressions[i].correct === false) {
+          this.mixedExpressions[i].hidden = true;
+          break;
+        }
       }
-    },
+
+      if (this.tempArray.length === 0 && this.current === this.mixedExpressions.length) {  
+        this.next_hidden = true;
+        alert("Results: " + Math.round((this.correct / this.attempted) * 100).toFixed(0) + "%");
+      } else if (this.current === this.mixedExpressions.length) {
+        this.mixedExpressions = this.tempArray;
+        this.mixedExpressions[0].hidden = true;
+        console.log(this.mixedExpressions);
+        this.tempArray = [];
+        this.current = 0;
+      }
+      
+      // if (this.tempArray.length === 0 && ) {  
+      //   this.next_hidden = true;
+      //   alert("Results: " + Math.round((this.correct / this.attempted) * 100).toFixed(0) + "%");
+      // } else if (this.current === this.mixedExpressions.length) {
+      //   this.tempArray[0].hidden = true;
+      //   this.mixedExpressions = this.tempArray;
+      //   console.log(this.mixedExpressions);
+      //   this.tempArray = [];
+      //   this.current = 0;
+      // }
+
+  },
     shuff: function(expressions) {
       for (var i = 0; i < expressions.length - 1; i++) {
         var j = i + Math.floor(Math.random() * (expressions.length - i));
-
         var temp = expressions[j];
         expressions[j] = expressions[i];
         expressions[i] = temp;
@@ -97,7 +114,7 @@ export default {
       return expressions;
     },
     hide_factory: function() {
-      this.course.expressions[0].hidden = true;
+      // this.mixedExpressions[this.expressions_length - 1].hidden = false;
       this.next_hidden = false;
       location.reload(true);
     }

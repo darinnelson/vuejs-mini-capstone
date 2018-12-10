@@ -27,7 +27,9 @@
         <div class="card" style="min-height:363.66px;">
           <div class="card-body">
            <!--  <h5 class="card-title">{{ course.name }}</h5> -->
-            <a v-bind:href="`/#/courses/${course.name}`" ><img class="card-img-top" v-bind:src="course.image_url" alt="Card image cap" style="height:363.66px;"></a>
+            <a v-bind:href="`/#/courses/${course.name}`" v-on:click="createCourseUser(course)">
+              <img class="card-img-top" v-bind:src="course.image_url" alt="Card image cap" style="height:363.66px">
+            </a>
             <div>
               <h3><center>{{ course.name }}</center></h3>
             </div>
@@ -126,7 +128,7 @@ export default {
     },
     tog: function() {
       this.toggle *= -1;
-    }
+    },
   },
   computed: {}
 };
