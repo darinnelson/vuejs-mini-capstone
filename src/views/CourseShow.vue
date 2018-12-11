@@ -12,6 +12,16 @@
       <a v-bind:href="`/#/courses/${course.name}`" class="button" v-on:click="hide_factory()">Yes!</a>
       <a href="/#/courses" class="button">No, take me back to all courses</a>
     </div>
+
+    <div v-if="fiveHidden===true">
+      <div v-for="item in eachFiveArray">
+        <div v-if="item.hidden_grid===false">
+          <button v-on:click="matchingPair(item.english, item.spanish, item)">{{ item.english }}</button>
+          <button v-on:click="matchingPair(item.spanish, item.english, item)">{{ item.spanish }}</button>
+        </div>
+      </div>
+    </div>
+
     <a href="/#/courses">Back to all courses</a>
   </div>
 </template>
@@ -35,8 +45,13 @@ export default {
       next_hidden: false,
       expressions: [],
       mixedExpressions: [],
-      expressions_length: 0,
-      tempArray: []
+      expressions_length: 0,  // ü
+      tempArray: [],
+      eachFiveArray: [],
+      fiveHidden: false,
+      firstSelected: false,
+      first: "",
+      gridCorrectCount: 0
     };
   },
   created: function() {
@@ -47,7 +62,7 @@ export default {
         this.attempted = 0;
         this.course = response.data;
         this.expressions = this.course.expressions;
-        this.mixedExpressions = this.shuff(this.expressions).slice(0,3);
+        this.mixedExpressions = this.shuff(this.expressions).slice(0,4);
         this.mixedExpressions[this.current].hidden = true;
         this.expressions_length = this.mixedExpressions.length;
       }.bind(this));
@@ -55,7 +70,6 @@ export default {
 
   methods: {
     checkAnswer: function(answer, currentExpression) {
-  
       this.attempted += 1;
       axios.post("http://localhost:3000/increase_global_attempted");
       axios.post("http://localhost:3000/increase_local_attempted/" + this.course.id);
@@ -65,6 +79,8 @@ export default {
         axios.post("http://localhost:3000/increase_global_xp");
         axios.post("http://localhost:3000/increase_local_xp/" + this.course.id);
         this.mixedExpressions[this.current].correct = true;
+        this.eachFiveArray.push(currentExpression);
+        console.log(this.eachFiveArray);
       } else {
         alert("You're garbage you noob. The correct answer is: " + answer);
         this.tempArray.push(currentExpression);
@@ -74,36 +90,35 @@ export default {
       this.mixedExpressions[this.current].hidden = false;
       this.current += 1;
 
-      for (var i = this.current; i < this.mixedExpressions.length; i++) {
-        if (this.mixedExpressions[i].correct === false) {
-          this.mixedExpressions[i].hidden = true;
-          break;
+      if (this.eachFiveArray.length === 3) {
+        this.eachFiveArray.forEach(function(each) {
+          each.hidden_grid = false;
+        });
+        this.fiveHidden = true;
+      } else {
+        for (var i = this.current; i < this.mixedExpressions.length; i++) {
+          if (this.mixedExpressions[i].correct === false) {
+            this.mixedExpressions[i].hidden = true;
+            break;
+          }
+        }
+        if (this.current === this.mixedExpressions.length) {
+          this.mixedExpressions = this.tempArray;
+          this.mixedExpressions[0].hidden = true;
+          console.log(this.mixedExpressions);
+          this.tempArray = [];
+          this.current = 0;
         }
       }
-
-      if (this.tempArray.length === 0 && this.current === this.mixedExpressions.length) {  
-        this.next_hidden = true;
-        alert("Results: " + Math.round((this.correct / this.attempted) * 100).toFixed(0) + "%");
-      } else if (this.current === this.mixedExpressions.length) {
-        this.mixedExpressions = this.tempArray;
-        this.mixedExpressions[0].hidden = true;
-        console.log(this.mixedExpressions);
-        this.tempArray = [];
-        this.current = 0;
-      }
       
-      // if (this.tempArray.length === 0 && ) {  
+      // if (this.tempArray.length === 0 && this.current === this.mixedExpressions.length) {  
       //   this.next_hidden = true;
       //   alert("Results: " + Math.round((this.correct / this.attempted) * 100).toFixed(0) + "%");
-      // } else if (this.current === this.mixedExpressions.length) {
-      //   this.tempArray[0].hidden = true;
-      //   this.mixedExpressions = this.tempArray;
-      //   console.log(this.mixedExpressions);
-      //   this.tempArray = [];
-      //   this.current = 0;
-      // }
+      // } else 
 
-  },
+      
+
+    },
     shuff: function(expressions) {
       for (var i = 0; i < expressions.length - 1; i++) {
         var j = i + Math.floor(Math.random() * (expressions.length - i));
@@ -117,6 +132,35 @@ export default {
       // this.mixedExpressions[this.expressions_length - 1].hidden = false;
       this.next_hidden = false;
       location.reload(true);
+    },
+    matchingPair: function(clickedTranslation, desiredTranslation, expression) {
+      if (this.firstSelected) {
+        console.log(clickedTranslation, desiredTranslation, this.first);
+        if (desiredTranslation === this.first) {
+          expression.hidden_grid = true;
+          this.firstSelected = false;     // ü
+          this.first = "";
+          this.gridCorrectCount += 1;
+          if (this.gridCorrectCount === this.eachFiveArray.length) {
+            this.eachFiveArray = [];
+            if (this.mixedExpressions[this.current]) {
+              this.mixedExpressions[this.current].hidden = true;
+            }
+            this.gridCorrectCount = 0;
+            console.log(this.tempArray.length, this.current, this.mixedExpressions.length);
+            if (this.tempArray.length === 0 && this.current === this.mixedExpressions.length) {  
+              this.next_hidden = true;
+              alert("Results: " + Math.round((this.correct / this.attempted) * 100).toFixed(0) + "%");
+            }
+          }
+        } else {
+          this.firstSelected = true;
+          this.first = clickedTranslation;
+        }
+      } else {
+        this.firstSelected = true;
+        this.first = clickedTranslation;
+      }
     }
   },
   computed: {}
@@ -125,3 +169,15 @@ export default {
 
 <!-- v-bind:src="recipe.image_url" -->
 <!-- <a v-bind:href="    `/#/recipes/${recipe.id}`     " class="btn btn-primary">go somewhere</a> -->
+
+
+      if (this.tempArray.length === 0 && this.current === this.mixedExpressions.length) {  
+        this.next_hidden = true;
+        alert("Results: " + Math.round((this.correct / this.attempted) * 100).toFixed(0) + "%");
+      } else if (this.current === this.mixedExpressions.length) {
+        this.mixedExpressions = this.tempArray;
+        this.mixedExpressions[0].hidden = true;
+        console.log(this.mixedExpressions);
+        this.tempArray = [];
+        this.current = 0;
+      }
