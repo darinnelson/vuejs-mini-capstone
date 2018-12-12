@@ -1,25 +1,46 @@
 <template>
   <div class="home">
-    <div v-for="mixedExpression in mixedExpressions">
-      <div v-if="mixedExpression.hidden===true">
-        <h2>{{ mixedExpression.english }}</h2>
-        <input type="text" v-model="attempt">
-        <div><input type="submit" value="Check" v-on:click='checkAnswer(mixedExpression.spanish, mixedExpression)'></div>
+    <div v-if="endHidden === false">
+      <div v-for="mixedExpression in mixedExpressions">
+        <div v-if="random > 0.5">
+          <div v-if="mixedExpression.hidden===true">
+            <h2>{{ mixedExpression.english }}</h2>
+            <input type="text" v-model="attempt">
+            <div><input type="submit" value="Check" v-on:click='checkAnswer(mixedExpression.spanish, mixedExpression)'></div>
+          </div>
+        </div>
+        <div v-else>
+          <div v-if="mixedExpression.hidden===true">
+            <h2>{{ mixedExpression.spanish }}</h2>
+            <input type="text" v-model="attempt">
+            <div><input type="submit" value="Check" v-on:click='checkAnswer(mixedExpression.english, mixedExpression)'></div>
+          </div>
+        </div>
+      </div>
+
+      <div v-if="fiveHidden===true">
+        <div v-for="item in eachFiveArray">
+          <div v-if="item.hidden_grid===false">
+            <button v-on:click="matchingPair(item.english, item.spanish, item)">{{ item.english }}</button>
+            <button v-on:click="matchingPair(item.spanish, item.english, item)">{{ item.spanish }}</button>
+          </div>
+        </div>
       </div>
     </div>
+
+    <div v-if="endHidden===true">
+      <div>{{ currentExpression }}</div> 
+      <div v-for="finalExpression in scrambledFinalExpressions">
+        <div v-if="finalExpression.hidden===true">
+          <button v-on:click="hideFinal(finalExpression)">{{finalExpression.spanish}}</button>
+        </div>
+      </div>
+    </div>
+
     <div v-if="next_hidden===true">
       <div><h4>Would you like to practice this course again?</h4></div>
       <a v-bind:href="`/#/courses/${course.name}`" class="button" v-on:click="hide_factory()">Yes!</a>
       <a href="/#/courses" class="button">No, take me back to all courses</a>
-    </div>
-
-    <div v-if="fiveHidden===true">
-      <div v-for="item in eachFiveArray">
-        <div v-if="item.hidden_grid===false">
-          <button v-on:click="matchingPair(item.english, item.spanish, item)">{{ item.english }}</button>
-          <button v-on:click="matchingPair(item.spanish, item.english, item)">{{ item.spanish }}</button>
-        </div>
-      </div>
     </div>
 
     <a href="/#/courses">Back to all courses</a>
@@ -51,7 +72,13 @@ export default {
       fiveHidden: false,
       firstSelected: false,
       first: "",
-      gridCorrectCount: 0
+      gridCorrectCount: 0,
+      random: Math.random(),
+      endHidden: false,
+      currentExpression: "",
+      finalExpressions: [],
+      scrambledFinalExpressions: [],
+      endIndex: 1
     };
   },
   created: function() {
@@ -63,6 +90,10 @@ export default {
         this.course = response.data;
         this.expressions = this.course.expressions;
         this.mixedExpressions = this.shuff(this.expressions).slice(0,4);
+        this.finalExpressions = this.shuff(this.mixedExpressions);
+        this.scrambledFinalExpressions = this.shuff(this.finalExpressions);
+        console.table(this.finalExpressions);
+        console.table(this.scrambledFinalExpressions);
         this.mixedExpressions[this.current].hidden = true;
         this.expressions_length = this.mixedExpressions.length;
       }.bind(this));
@@ -71,6 +102,7 @@ export default {
   methods: {
     checkAnswer: function(answer, currentExpression) {
       this.attempted += 1;
+      this.random = Math.random();
       axios.post("http://localhost:3000/increase_global_attempted");
       axios.post("http://localhost:3000/increase_local_attempted/" + this.course.id);
       if (this.attempt === answer) {
@@ -90,7 +122,7 @@ export default {
       this.mixedExpressions[this.current].hidden = false;
       this.current += 1;
 
-      if (this.eachFiveArray.length === 3) {
+      if (this.eachFiveArray.length % 2 === 0 && this.eachFiveArray.length !== 0) {
         this.eachFiveArray.forEach(function(each) {
           each.hidden_grid = false;
         });
@@ -110,16 +142,9 @@ export default {
           this.current = 0;
         }
       }
-      
-      // if (this.tempArray.length === 0 && this.current === this.mixedExpressions.length) {  
-      //   this.next_hidden = true;
-      //   alert("Results: " + Math.round((this.correct / this.attempted) * 100).toFixed(0) + "%");
-      // } else 
-
-      
-
     },
-    shuff: function(expressions) {
+    shuff: function(originalExpressions) {
+      var expressions = originalExpressions.slice();
       for (var i = 0; i < expressions.length - 1; i++) {
         var j = i + Math.floor(Math.random() * (expressions.length - i));
         var temp = expressions[j];
@@ -148,9 +173,12 @@ export default {
             }
             this.gridCorrectCount = 0;
             console.log(this.tempArray.length, this.current, this.mixedExpressions.length);
-            if (this.tempArray.length === 0 && this.current === this.mixedExpressions.length) {  
-              this.next_hidden = true;
-              alert("Results: " + Math.round((this.correct / this.attempted) * 100).toFixed(0) + "%");
+            if (this.tempArray.length === 0 && this.current === this.mixedExpressions.length) {
+              this.endHidden = true;
+              this.currentExpression = this.finalExpressions[0].english;
+              this.scrambledFinalExpressions.forEach(function(finalExpression) {
+                finalExpression.hidden = true;
+              });
             }
           }
         } else {
@@ -160,6 +188,21 @@ export default {
       } else {
         this.firstSelected = true;
         this.first = clickedTranslation;
+      }
+    },
+    hideFinal: function(finalExpression) {
+      if (this.endIndex === this.expressions_length) {
+        this.endHidden = false;
+        this.next_hidden = true;
+        finalExpression.hidden = false;
+        alert("Results: " + Math.round((this.correct / this.attempted) * 100).toFixed(0) + "%");
+      } else {
+        if (finalExpression.english === this.currentExpression) {
+          this.currentExpression = this.finalExpressions[this.endIndex].english;
+          console.log(this.currentExpression, this.finalExpressions[this.endIndex].english);
+          finalExpression.hidden = false;
+          this.endIndex += 1
+        }
       }
     }
   },
@@ -171,13 +214,3 @@ export default {
 <!-- <a v-bind:href="    `/#/recipes/${recipe.id}`     " class="btn btn-primary">go somewhere</a> -->
 
 
-      if (this.tempArray.length === 0 && this.current === this.mixedExpressions.length) {  
-        this.next_hidden = true;
-        alert("Results: " + Math.round((this.correct / this.attempted) * 100).toFixed(0) + "%");
-      } else if (this.current === this.mixedExpressions.length) {
-        this.mixedExpressions = this.tempArray;
-        this.mixedExpressions[0].hidden = true;
-        console.log(this.mixedExpressions);
-        this.tempArray = [];
-        this.current = 0;
-      }
