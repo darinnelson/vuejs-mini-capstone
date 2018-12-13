@@ -37,6 +37,12 @@
       </div>
     </div>
 
+    <div> 
+      <p>Interested in translating a specific word? Type it below.</p>
+      <input type="text" v-model="translation">
+      <div><input type="submit" v-on:click='translate()'></div>
+    </div>
+
     <div v-if="next_hidden===true">
       <div><h4>Would you like to practice this course again?</h4></div>
       <a v-bind:href="`/#/courses/${course.name}`" class="button" v-on:click="hide_factory()">Yes!</a>
@@ -47,11 +53,22 @@
   </div>
 </template>
 
+
+
 <style>
 </style>
 
 <script>
 var axios = require("axios");
+var wr = require('wordreference-api');
+/**
+ * wr
+ * Gets the result for the given word, available languages: 'es', 'en', 'it', 'fr'
+ * @param  {String} word Word to be searched
+ * @param  {String} from from language, default 'en'
+ * @param  {String} to   to language, default 'es'
+ * @return {Object}      Object with the word data
+ */
 
 export default {
   data: function() {
@@ -78,22 +95,22 @@ export default {
       currentExpression: "",
       finalExpressions: [],
       scrambledFinalExpressions: [],
-      endIndex: 1
+      endIndex: 1,
+      translation: ""
     };
   },
   created: function() {
     axios.get("http://localhost:3000/api/courses/" + this.$route.params.name).then(
       function(response) {
+        // wr('Rainbow');
         this.current = 0;
         this.correct = 0;
         this.attempted = 0;
         this.course = response.data;
         this.expressions = this.course.expressions;
-        this.mixedExpressions = this.shuff(this.expressions).slice(0,4);
+        this.mixedExpressions = this.shuff(this.expressions).slice(0,8);
         this.finalExpressions = this.shuff(this.mixedExpressions);
         this.scrambledFinalExpressions = this.shuff(this.finalExpressions);
-        console.table(this.finalExpressions);
-        console.table(this.scrambledFinalExpressions);
         this.mixedExpressions[this.current].hidden = true;
         this.expressions_length = this.mixedExpressions.length;
       }.bind(this));
@@ -204,13 +221,18 @@ export default {
           this.endIndex += 1
         }
       }
+    },
+    translate: function() {
+      wr(this.translation,'en','es').then(
+        function(result) {
+          var translations = result.translations[0].translations
+          translations.forEach(function(translation) {
+            console.log(translation.to);
+          })
+          
+        }); 
     }
   },
   computed: {}
 };
 </script>
-
-<!-- v-bind:src="recipe.image_url" -->
-<!-- <a v-bind:href="    `/#/recipes/${recipe.id}`     " class="btn btn-primary">go somewhere</a> -->
-
-
