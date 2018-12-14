@@ -7,6 +7,7 @@ import CreateUser from './views/CreateUser.vue'
 import Signup from './views/Signup.vue'
 import Login from './views/Login.vue'
 import Leaderboards from './views/Leaderboards.vue'
+import WordReference from './views/WordReference.vue'
 
 Vue.use(Router)
 
@@ -46,6 +47,11 @@ export default new Router({
       path: '/leaderboards',
       name: 'leaderboards',
       component: Leaderboards
+    },
+    {
+      path: '/wordreference',
+      name: 'wordreference',
+      component: WordReference
     },
     {
       path: '/about',
