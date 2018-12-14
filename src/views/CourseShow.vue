@@ -37,12 +37,6 @@
       </div>
     </div>
 
-    <div> 
-      <p>Interested in translating a specific word? Type it below.</p>
-      <input type="text" v-model="translation">
-      <div><input type="submit" v-on:click='translate()'></div>
-    </div>
-
     <div v-if="next_hidden===true">
       <div><h4>Would you like to practice this course again?</h4></div>
       <a v-bind:href="`/#/courses/${course.name}`" class="button" v-on:click="hide_factory()">Yes!</a>
@@ -50,10 +44,18 @@
     </div>
 
     <a href="/#/courses">Back to all courses</a>
+
+    <div> 
+      <p>Interested in translating a specific word? Type it below.</p>
+      <input type="text" v-model="translation">
+      <div><input type="submit" v-on:click='translate()'></div>
+      <div v-for="trans in translationsArray">
+        <h2>{{ trans }}</h2>
+      </div>
+    </div>
+
   </div>
 </template>
-
-
 
 <style>
 </style>
@@ -61,14 +63,6 @@
 <script>
 var axios = require("axios");
 var wr = require('wordreference-api');
-/**
- * wr
- * Gets the result for the given word, available languages: 'es', 'en', 'it', 'fr'
- * @param  {String} word Word to be searched
- * @param  {String} from from language, default 'en'
- * @param  {String} to   to language, default 'es'
- * @return {Object}      Object with the word data
- */
 
 export default {
   data: function() {
@@ -96,7 +90,8 @@ export default {
       finalExpressions: [],
       scrambledFinalExpressions: [],
       endIndex: 1,
-      translation: ""
+      translation: "",
+      translationsArray: []
     };
   },
   created: function() {
@@ -108,7 +103,7 @@ export default {
         this.attempted = 0;
         this.course = response.data;
         this.expressions = this.course.expressions;
-        this.mixedExpressions = this.shuff(this.expressions).slice(0,8);
+        this.mixedExpressions = this.shuff(this.expressions).slice(0,4);
         this.finalExpressions = this.shuff(this.mixedExpressions);
         this.scrambledFinalExpressions = this.shuff(this.finalExpressions);
         this.mixedExpressions[this.current].hidden = true;
@@ -177,7 +172,6 @@ export default {
     },
     matchingPair: function(clickedTranslation, desiredTranslation, expression) {
       if (this.firstSelected) {
-        console.log(clickedTranslation, desiredTranslation, this.first);
         if (desiredTranslation === this.first) {
           expression.hidden_grid = true;
           this.firstSelected = false;     // ü
@@ -189,7 +183,6 @@ export default {
               this.mixedExpressions[this.current].hidden = true;
             }
             this.gridCorrectCount = 0;
-            console.log(this.tempArray.length, this.current, this.mixedExpressions.length);
             if (this.tempArray.length === 0 && this.current === this.mixedExpressions.length) {
               this.endHidden = true;
               this.currentExpression = this.finalExpressions[0].english;
@@ -212,11 +205,10 @@ export default {
         this.endHidden = false;
         this.next_hidden = true;
         finalExpression.hidden = false;
-        alert("Results: " + Math.round((this.correct / this.attempted) * 100).toFixed(0) + "%");
+        alert("Great job! You gained 10 XP!");
       } else {
         if (finalExpression.english === this.currentExpression) {
           this.currentExpression = this.finalExpressions[this.endIndex].english;
-          console.log(this.currentExpression, this.finalExpressions[this.endIndex].english);
           finalExpression.hidden = false;
           this.endIndex += 1
         }
@@ -226,11 +218,12 @@ export default {
       wr(this.translation,'en','es').then(
         function(result) {
           var translations = result.translations[0].translations
+          this.translationsArray = []
           translations.forEach(function(translation) {
-            console.log(translation.to);
-          })
-          
-        }); 
+            this.translationsArray.push(translation.to);
+          }.bind(this))
+          console.log(this.translationsArray);
+        }.bind(this)); 
     }
   },
   computed: {}
