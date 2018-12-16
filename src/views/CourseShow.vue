@@ -26,6 +26,12 @@
           </div>
         </div>
       </div>
+      
+      <div v-if="specialShow === true">
+        <div v-for="specialCharacter in specialCharacters">
+          <button v-on:click="insertCharacter(specialCharacter)">{{ specialCharacter}}</button>
+        </div>
+      </div>
     </div>
 
     <div v-if="endHidden===true">
@@ -45,14 +51,14 @@
 
     <a href="/#/courses">Back to all courses</a>
 
-    <div> 
+<!--     <div> 
       <p>Interested in translating a specific word? Type it below.</p>
       <input type="text" v-model="translation">
       <div><input type="submit" v-on:click='translate()'></div>
       <div v-for="trans in translationsArray">
         <h2>{{ trans }}</h2>
       </div>
-    </div>
+    </div> -->
 
   </div>
 </template>
@@ -91,7 +97,9 @@ export default {
       scrambledFinalExpressions: [],
       endIndex: 1,
       translation: "",
-      translationsArray: []
+      translationsArray: [],
+      specialCharacters: ["ü", "ñ"],
+      specialShow: true
     };
   },
   created: function() {
@@ -103,7 +111,7 @@ export default {
         this.attempted = 0;
         this.course = response.data;
         this.expressions = this.course.expressions;
-        this.mixedExpressions = this.shuff(this.expressions).slice(0,4);
+        this.mixedExpressions = this.shuff(this.expressions).slice(0,9);
         this.finalExpressions = this.shuff(this.mixedExpressions);
         this.scrambledFinalExpressions = this.shuff(this.finalExpressions);
         this.mixedExpressions[this.current].hidden = true;
@@ -134,7 +142,8 @@ export default {
       this.mixedExpressions[this.current].hidden = false;
       this.current += 1;
 
-      if (this.eachFiveArray.length % 2 === 0 && this.eachFiveArray.length !== 0) {
+      if (this.eachFiveArray.length % 3 === 0 && this.eachFiveArray.length !== 0) {
+        this.specialShow = false;
         this.eachFiveArray.forEach(function(each) {
           each.hidden_grid = false;
         });
@@ -178,6 +187,7 @@ export default {
           this.first = "";
           this.gridCorrectCount += 1;
           if (this.gridCorrectCount === this.eachFiveArray.length) {
+            this.specialShow = true;
             this.eachFiveArray = [];
             if (this.mixedExpressions[this.current]) {
               this.mixedExpressions[this.current].hidden = true;
@@ -202,6 +212,7 @@ export default {
     },
     hideFinal: function(finalExpression) {
       if (this.endIndex === this.expressions_length) {
+        this.specialShow = false;
         this.endHidden = false;
         this.next_hidden = true;
         finalExpression.hidden = false;
@@ -224,6 +235,13 @@ export default {
           }.bind(this))
           console.log(this.translationsArray);
         }.bind(this)); 
+    },
+    insertCharacter: function(specialCharacter) {
+      var temp = this.attempt.split("");
+      temp.push(specialCharacter);
+      console.log(temp);
+      this.attempt = temp.join("");
+      console.log(this.attempt);
     }
   },
   computed: {}
