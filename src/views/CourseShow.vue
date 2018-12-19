@@ -37,7 +37,21 @@
       </div>
     </div>
 
-    
+    <div v-if="getStarted === true"> 
+      <button v-on:click="initialize()">Let's get started!</button>
+    </div>
+
+    <div v-if="teachingWords === true">
+      <h2>The words are shown below with the translation. You will be quized on these words after you view them all.</h2>
+    </div>
+    <div v-if="teachingWords === true">
+      <div v-for="initialExpression in initialExpressions">
+        <div v-if="initialExpression.hidden === true">
+          <h4>{{ initialExpression.english}} - {{initialExpression.spanish}}</h4>
+          <button v-on:click="nextPair()">Next</button>
+        </div>
+      </div>
+    </div>
 
     <div v-if="endHidden === false">
       <div v-if="typeTranslate === true">
@@ -109,7 +123,7 @@
 <!--     <div v-if="typeListMatch">
       
     </div> -->
-    <div v-if="endHidden===true">
+    <div v-if="endHidden===true && x === 1">
       <h2>Choose the correct translation of the word from the following list</h2>
       <div>{{ currentExpression }}</div> 
       <div v-for="finalExpression in scrambledFinalExpressions">
@@ -148,6 +162,8 @@ var wr = require('wordreference-api');
 export default {
   data: function() {
     return {
+      getStarted: true,
+      currentTeach: 0,
       course: {},
       user: {},
       attempt: "",
@@ -166,7 +182,7 @@ export default {
       first: "",
       gridCorrectCount: 0,
       random: Math.random(),
-      endHidden: false,
+      endHidden: true,
       currentExpression: "",
       finalExpressions: [],
       scrambledFinalExpressions: [],
@@ -181,7 +197,10 @@ export default {
       modalShow: false,
       correctCheck: false,
       correctAnswer: "",
-      toModal: 0
+      toModal: 0,
+      x: 0,
+      teachingWords: false,
+      intitalExpressions: []
     };
   },
   created: function() {
@@ -290,6 +309,7 @@ export default {
             this.gridCorrectCount = 0;
             if (this.tempArray.length === 0 && this.current === this.mixedExpressions.length) {
               this.endHidden = true;
+              this.x = 1;
               this.currentExpression = this.finalExpressions[0].english;
               this.scrambledFinalExpressions.forEach(function(finalExpression) {
                 finalExpression.hidden = true;
@@ -324,11 +344,11 @@ export default {
     translate: function() {
       wr(this.translation,'en','es').then(
         function(result) {
-          var translations = result.translations[0].translations
-          this.translationsArray = []
+          var translations = result.translations[0].translations;
+          this.translationsArray = [];
           translations.forEach(function(translation) {
             this.translationsArray.push(translation.to);
-          }.bind(this))
+          }.bind(this));
           console.log(this.translationsArray);
         }.bind(this)); 
     },
@@ -338,6 +358,28 @@ export default {
       console.log(temp);
       this.attempt = temp.join("");
       console.log(this.attempt);
+    },
+    nextPair: function() {
+      this.initialExpressions[this.currentTeach].hidden = false;
+      this.currentTeach += 1;
+      if (this.currentTeach === this.expressions_length) {
+        this.teachingWords = false;
+        this.endHidden = false;
+        this.mixedExpressions[0].hidden = true;
+      } else {
+        this.initialExpressions[this.currentTeach].hidden = true;
+      }
+    },
+    initialize: function() {
+      var initialExpressions = this.shuff(this.mixedExpressions);
+      initialExpressions.forEach(function(initialExpression)  {
+        initialExpression.hidden = false;
+      });
+      this.getStarted = false;
+      this.teachingWords = true;
+      this.initialExpressions = initialExpressions;
+      this.initialExpressions[0].hidden = true;
+      console.log(this.initialExpressions);
     }
   },
   computed: {}
