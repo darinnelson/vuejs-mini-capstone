@@ -38,7 +38,7 @@
     </div>
 
     <div v-if="getStarted === true"> 
-      <button v-on:click="initialize()">Let's get started!</button>
+      <button class="btn" v-on:click="initialize()">Let's get started!</button>
     </div>
 
     <div v-if="teachingWords === true">
@@ -48,7 +48,7 @@
       <div v-for="initialExpression in initialExpressions">
         <div v-if="initialExpression.hidden === true">
           <h4>{{ initialExpression.english}} - {{initialExpression.spanish}}</h4>
-          <button v-on:click="nextPair()">Next</button>
+          <button class="btn" v-on:click="nextPair()">Next</button>
         </div>
       </div>
     </div>
@@ -107,15 +107,15 @@
       <div v-if="fiveHidden===true">
         <div v-for="item in eachFiveArray">
           <div v-if="item.hidden_grid===false">
-            <button v-on:click="matchingPair(item.english, item.spanish, item)">{{ item.english }}</button>
-            <button v-on:click="matchingPair(item.spanish, item.english, item)">{{ item.spanish }}</button>
+            <button class="btn"v-on:click="matchingPair(item.english, item.spanish, item)">{{ item.english }}</button>
+            <button class="btn"v-on:click="matchingPair(item.spanish, item.english, item)">{{ item.spanish }}</button>
           </div>
         </div>
       </div>
       
       <div v-if="specialShow === true">
         <div v-for="specialCharacter in specialCharacters">
-          <button v-on:click="insertCharacter(specialCharacter)">{{ specialCharacter}}</button>
+          <button class="btn" v-on:click="insertCharacter(specialCharacter)">{{ specialCharacter}}</button>
         </div>
       </div>
     </div>
@@ -143,11 +143,13 @@
 
     <div v-if="next_hidden===true">
       <div><h4>Would you like to practice this course again?</h4></div>
-      <a v-bind:href="`/#/courses/${course.name}`" class="button" v-on:click="hide_factory()">Yes!</a>
-      <a href="/#/courses" class="button">No, take me back to all courses</a>
+      <a v-bind:href="`/#/courses/${course.name}`" class="waves-effect waves-light btn-large" v-on:click="hide_factory()">Yes!</a>
+      <a href="/#/courses" class="waves-effect waves-light btn-large">No, back to all courses</a>
     </div>
 
-    <a href="/#/courses">Back to all courses</a>
+    <div v-if="next_hidden===false && getStarted === false">
+      <a href="/#/courses" class="btn">Back to all courses</a>
+    </div>
 
   </div>
 </template>
