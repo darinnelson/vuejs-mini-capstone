@@ -22,33 +22,53 @@
       </button>
     </nav>
 
-    <div class="row" is="transition-group" name="slide-right">
-      <div v-for="course in orderBy(courses, 'name')" class="col-md-4 mb-2" v-bind:key="course.id">
-        <div class="card" style="min-height:363.66px;">
-          <div class="card-body">
-           <!--  <h5 class="card-title">{{ course.name }}</h5> -->
-            <a v-bind:href="`/#/courses/${course.name}`" v-on:click="createCourseUser(course)">
-              <img class="card-img-top" v-bind:src="course.image_url" alt="Card image cap" style="height:363.66px">
-            </a>
-            <div>
-              <h3><center>{{ course.name }}</center></h3>
+    <div class="container">
+      <div class="row" is="transition-group" name="slide-right">
+
+        <div v-for="course in orderBy(courses, 'name')" class="col m4" v-bind:key="course.id" style="height:420px !important;">
+
+          <!-- <div class="card" >
+            <div class="card-image">
+              <img v-bind:src="course.image_url">
+              <span class="card-title">{{ course.name }}</span>
+            </div>
+            <div class="card-action">
+              <a v-bind:href="`/#/courses/${course.name}`" v-on:click="createCourseUser(course)">Go to course</a>
+            </div>
+          </div> -->
+
+          <div class="card">
+            <div class="card-image waves-effect waves-block waves-light">
+              <img class="activator" v-bind:src="course.image_url">
+            </div>
+            <div class="card-content">
+              <span class="card-title activator grey-text text-darken-4">{{ course.name }}<i class="material-icons right">more_vert</i></span>
+              <p><a v-bind:href="`/#/courses/${course.name}`" v-on:click="createCourseUser(course)">Go to course</a></p>
+            </div>
+            <div class="card-reveal">
+              <span class="card-title grey-text text-darken-4">{{ course.name }}<i class="material-icons right">close</i></span>
+              <p>Here is some more information about this product that is only revealed once clicked on.</p>
             </div>
           </div>
+
+
+
         </div>
       </div>
-    </div>
 
-<!--     <div is="transition-group" name="slide-right">
-      <div v-for="course in orderBy(filterBy(courses, courseFilter, 'name'), sortAttribute, toggle)" v-bind:key="course.id">
-        <button v-on:click="createCourseUser(course)">{{ course.name }}</button>
+      <div>
+        <button v-on:click="showStats()">My Stats</button>
       </div>
-    </div> -->
-
-    <div>
-      <button v-on:click="showStats()">My Stats</button>
     </div>
 
+  <!--     <div is="transition-group" name="slide-right">
+        <div v-for="course in orderBy(filterBy(courses, courseFilter, 'name'), sortAttribute, toggle)" v-bind:key="course.id">
+          <button v-on:click="createCourseUser(course)">{{ course.name }}</button>
+        </div>
+      </div> -->
+      
   </div>
+
 </template>
 
 <style>

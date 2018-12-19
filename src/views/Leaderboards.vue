@@ -1,6 +1,6 @@
 <template>
   <div class="course_home">
-
+      <h6>Leaderboards</h6>
       <table class="table" id="leaderboard">
         <thead>
           <tr>

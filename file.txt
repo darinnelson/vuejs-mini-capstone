@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "native-talk",
+  "private_key_id": "0ae9eb5b4af7fac900195ea75d4245670952a4da",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCx062bpIK5Bl+p\ndgQLOJbR3pTjLxwTHz+vg5UEJuUTU1p4d/Vk3GUwlTzuFUP4ABtQNwZbu/jf6v3y\nB+axIX6Np7VeHu9yh1JJphqp7r03zuUGGOEfnZmzckqVgaDAcp8mFDZPQOy7Eccv\nnhojtx7CR2hzLVYGyaBna5dD9uPX7zSpSF5rMVqD+hHTnGnfmUuHnHMZxR+C5MLR\nADm3f1tzBM1QSh9RUFgFInQZxC4LmWgRn5BJeiwi2ihaWzvQV5IS7/kDQdx4AyCa\nzFA+t2NyYYgd627dH+zRhgVZEf63HyRoPjwihxQMo1bc8K2Xor9WHT2XO1L3UosW\n32BOnNqFAgMBAAECggEAAnZ9DrfI5l5z5WPwtbsTPlWH2FxRq44g6AG5hvTcSAKS\nhofwH8p8TZ+eLWn2prD8WoW4kn1YUA7wH3Guket11j5pYPlVYE+xexBQNDmjPepL\n+mP5J41GO1ms4MSKgRUqpnCx490b/5Hvy/VeRU+xnwfgJsriSHZzFfDuh7lxTw9H\nZ9hA4oTGktm939sXj5C3iwrjN9t4Zr6xyCdYXQPeIDgMYhpKiRnufmc1oF9ZGvWn\nQsJMxA/GFcvAq/LKykqu8UOIsHOlw7Vu2CDY0zY0eakurI5ZeaEAjCAK2LMBncLf\n1eNdWiZoG4kyZ0idXBIRlIC+0RYPN3WCT904LCY0gQKBgQD7Q6nZqeK/eBmNCFh1\n/G468t3mT5eYViWWjqfAT39twp88w4ocYtQ50026N+FCdJGpGlSSF6HY8o2VRgYX\n0n+33rxajWiXz3FbuN/7urYXiKbZqOCF1wBhg84AT3LpC12n90ZSep07/QtgAmrf\nNusq4OZ8dVMZq1OvxBcQjk1CIQKBgQC1La7b+Galrm6mwKa85E/jPXjP5McS6bAT\ne3hjHgoi4GODuKcDAki2ZyBmI8wgzyFxkfnODTckxevL2qpMBJKXkBtgaki1L8y/\ndZy2pk/K3qNdlcC5dX058hOw98zf3dIlc4taU9bH0Axe4rJgGByOL41ASW2LUZ6m\nqhDJNRBT5QKBgHbynEjHrOk5gNcMGVyZiNFtQfESwtBCD/9LP0zCFbAvT1TjuNEh\nVBif2I8Mfx4HsyEbrueOOndKtA3znVTPuNihoAc6JEah1Kc4SQiRZjyT23D1Cn0x\nwCNp0y7AbcS3NbobTHYlR6QrcaQc4N0U0ZV17IcEv7dKLQ7rRIP46cghAoGAZS52\nEPLQoIah1Q6SD7uRwd56sd+aLb3ET50Mxo3oK0IVUWK2IsALy5IcTe5/+XKzwrE7\nSQ+oVCkUXmxn3rxPAcXBBD9XC5j+R45vTrHirfFYWtNfJjOvE8VVqec5y2weCDxW\n/sMDl+NghT0lUPUmPWHhCJ35R2z1pS4k4bl4vOECgYEAuhGQD5CsineTQLTmv3jN\nvFvIj07QUyW3x0wlq0VPVoc8wSyA15QrFcwBCxjbj7Q1qd40uDYamttlzx2n62Nj\nFAxMnzIMpuQ71q56vS+0xPn1wCsQCvgUdMat4MY/nGh3y+3wz6YVrk5S/GVEq7e+\n1/oEKn08u7px/HMjhF0oB7s=\n-----END PRIVATE KEY-----\n",
+  "client_email": "native-talk@native-talk.iam.gserviceaccount.com",
+  "client_id": "118188877278830053890",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/native-talk%40native-talk.iam.gserviceaccount.com"
+}
