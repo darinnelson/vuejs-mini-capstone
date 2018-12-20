@@ -1,16 +1,27 @@
 <template>
   <div class="login">
 
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <a class="navbar-brand" href="/#/">Native Talk</a>
-      <a class="navbar-brand" href="/#/signup">Sign Up</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
+      <nav class="white" role="navigation">
+        <div class="nav-wrapper container">
+          <a id="logo-container" href="/#/" class="brand-logo">Native Talk</a>
+          <ul class="right hide-on-med-and-down">
+            <li><a href="#/leaderboards">Leaderboards</a></li>
+            <li><a href="#/signup">Sign Up</a></li>
+          </ul>
 
-    </nav>
+    <!--       <ul id="nav-mobile" class="sidenav">
+            
+          </ul> -->
+          <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+        </div>
+      </nav>
 
     <div class="container">
+
+        
+      <br>
+      <br>
+      <br>
       <div style="background-color: white; padding: 30px">
         <form v-on:submit.prevent="submit()">
           <h1>Login</h1>

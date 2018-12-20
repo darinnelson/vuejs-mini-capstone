@@ -1,20 +1,40 @@
 <template>
   <div class="course_home">
+
+      <nav class="white" role="navigation">
+        <div class="nav-wrapper container">
+          <a id="logo-container" href="/#/" class="brand-logo">Native Talk</a>
+          <ul class="right hide-on-med-and-down">
+            <li><a href="#/login">Log In</a></li>
+            <li><a href="#/signup">Sign Up</a></li>
+          </ul>
+
+    <!--       <ul id="nav-mobile" class="sidenav">
+            
+          </ul> -->
+          <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+        </div>
+      </nav>
+
+    <div class="container">
+
+
+
       <h6>Leaderboards</h6>
       <table class="table" id="leaderboard">
         <thead>
           <tr>
-            <th v-for="item in headers" scope="col">{{ item }}</th>
+            <th style="text-align:center" v-for="item in headers" scope="col">{{ item }}</th>
           </tr>
         </thead>
 
         <tbody>
           <tr v-for="row in rows">
-            <td v-for="item in row">{{item}}</td>
+            <td style="text-align:center" v-for="item in row">{{item}}</td>
           </tr>
         </tbody>
       </table>
-
+    </div>
   </div>
 </template>
 
@@ -77,7 +97,7 @@ export default {
       })
       .then(function() {
         $('#leaderboard').DataTable(
-
+            {"dom": ''}
           );
       });
   },

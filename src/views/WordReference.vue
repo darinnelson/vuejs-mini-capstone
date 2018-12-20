@@ -11,7 +11,7 @@
       >{{ word }} </span>
     </h1>
     <h2>Current word: {{ currentWord }} <span v-if="loading"> (translating...)</span></h2>
-    <button v-on:click="googleTranslate()">yo</button>
+
     <!-- <h2 v-else>{{ translation }}</h2> -->
   </div>
 </template>

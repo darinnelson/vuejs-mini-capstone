@@ -1,45 +1,29 @@
 <template>
   <div class="course_home">
-<!--<div>
-      <button v-on:click="sortAttribute = 'name', tog()">Sort by name</button>
-      <button v-on:click="sortAttribute = 'id'">Sort by id</button>
-    </div> -->
-<!--<div>
-      <h1>Search Courses</h1>
-      <input type="text" v-model="courseFilter" list="courses">
-    </div>
-    <br> -->
 
-<!--<datalist id="courses">
-      <option v-for="course in orderBy(courses, 'name')">{{ course.name }}</option>
-    </datalist> -->
+      <nav class="white" role="navigation">
+        <div class="nav-wrapper container">
+          <a id="logo-container" href="/#/" class="brand-logo">Native Talk</a>
+          <ul class="right hide-on-med-and-down">
+            <li><a href="#/leaderboards">Leaderboards</a></li>
+            <li><a href="#/signup">Sign Up</a></li>
+  <!--           <li><a v-on:click="showStats()">My Stats</a></l -->i>
+          </ul>
 
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <a class="navbar-brand" href="/#/">Native Talk</a>
-      <a class="navbar-brand" href="/#/login">Log In</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-    </nav>
+          <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+        </div>
+      </nav>
 
-    <div class="container">
+  <div class="container">
+    
       <div class="row" is="transition-group" name="slide-right">
 
         <div v-for="course in orderBy(courses, 'name')" class="col m4" v-bind:key="course.id" style="height:420px !important;">
 
-          <!-- <div class="card" >
-            <div class="card-image">
-              <img v-bind:src="course.image_url">
-              <span class="card-title">{{ course.name }}</span>
-            </div>
-            <div class="card-action">
-              <a v-bind:href="`/#/courses/${course.name}`" v-on:click="createCourseUser(course)">Go to course</a>
-            </div>
-          </div> -->
 
           <div class="card">
             <div class="card-image waves-effect waves-block waves-light">
-              <img class="activator" v-bind:src="course.image_url">
+              <img style="min-height:363px min-weight:500px" class="activator" v-bind:src="course.image_url">
             </div>
             <div class="card-content">
               <span class="card-title activator grey-text text-darken-4">{{ course.name }}<i class="material-icons right">more_vert</i></span>
@@ -56,9 +40,9 @@
         </div>
       </div>
 
-      <div>
+<!--       <div>
         <button v-on:click="showStats()">My Stats</button>
-      </div>
+      </div> -->
     </div>
 
   <!--     <div is="transition-group" name="slide-right">
