@@ -6,7 +6,6 @@
           <a id="logo-container" href="/#/" class="brand-logo">Native Talk</a>
           <ul class="right hide-on-med-and-down">
             <li><a href="#/leaderboards">Leaderboards</a></li>
-            <li><a href="#/signup">Sign Up</a></li>
   <!--           <li><a v-on:click="showStats()">My Stats</a></l -->i>
           </ul>
 
@@ -16,14 +15,14 @@
 
   <div class="container">
     
-      <div class="row" is="transition-group" name="slide-right">
+      <div class="row" is="transition-group" name="slide-right" style="margin-top:20px">
 
         <div v-for="course in orderBy(courses, 'name')" class="col m4" v-bind:key="course.id" style="height:420px !important;">
 
 
           <div class="card">
             <div class="card-image waves-effect waves-block waves-light">
-              <img style="min-height:363px min-weight:500px" class="activator" v-bind:src="course.image_url">
+              <img style="min-height:250px" class="activator" v-bind:src="course.image_url">
             </div>
             <div class="card-content">
               <span class="card-title activator grey-text text-darken-4">{{ course.name }}<i class="material-icons right">more_vert</i></span>

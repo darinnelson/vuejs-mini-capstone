@@ -20,7 +20,8 @@
 
 
 
-      <h6>Leaderboards</h6>
+      <h4 style="text-align:center">Leaderboards</h4>
+      <br><br>
       <table class="table" id="leaderboard">
         <thead>
           <tr>

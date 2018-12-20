@@ -57,12 +57,13 @@
     <div v-if="getStarted === true" class="col s12" style="text-align: center;">
       <div style="text-align: center;">
         <br><br> <br> <br> <br>  
-        <button style="text-align:center" class="btn" v-on:click="initialize()">Let's get started!</button>
+        <button style="text-align:center" class="btn-large" v-on:click="initialize()">Let's get started!</button>
       </div>
     </div>
 
     <div v-if="teachingWords === true">
       <h4>The words are shown below with the translation. You will be quized on these words after you view them all.</h4>
+      <br><br>
     </div>
     <div v-if="teachingWords === true">
       <div v-for="initialExpression in initialExpressions">
@@ -70,7 +71,8 @@
 
           <div class="row">
             <div class="col s12">
-              <h4 style="text-align:center">{{ initialExpression.english}} - {{initialExpression.spanish}}</h4>
+              <h4 style="text-align:center; margin:bottom:25px">{{ initialExpression.english}} - {{initialExpression.spanish}}</h4>
+              <br><br>
             </div>
             <div class="col s12" style="text-align: right;">
               <button style="text-align:center" class="btn-large" v-on:click="nextPair()">Next <i class="material-icons right">send</i></button>
@@ -92,12 +94,13 @@
 
     <div v-if="endHidden === false">
       <div v-if="typeTranslate === true">
-        <h2>Type the translation for the following word</h2>
+        <h3>Type the translation for the following word.</h3>
+        <br>
       </div>
       <div v-for="mixedExpression in mixedExpressions">
         <div v-if="random > 0.5">
           <div v-if="mixedExpression.hidden===true">
-            <h2>{{ mixedExpression.english }} <span @>  </span></h2>
+            <h4>{{ mixedExpression.english }} <span @>  </span></h4>
 
             <div class="row">
               <div class="col s12">
@@ -111,15 +114,29 @@
               </div>
             </div>
 
+            <div v-if="specialShow === true">
+              <div style="text-align:center">
+                <h6>Special Characters</h6>
+                <div>
+                <span>
+                  <button style="margin:5px" class="btn" v-on:click="insertCharacter(specialCharacters[0])">{{ specialCharacters[0]}}</button>
+                </span>
+                <span>
+                  <button style="margin:5px" class="btn" v-on:click="insertCharacter(specialCharacters[1])">{{ specialCharacters[1]}}</button>
+                </span>
+                </div>
+              </div>
+            </div>
+
             <!-- Modal Trigger -->
-            <a class="waves-effect waves-light btn modal-trigger" href="#modal1" v-on:click='checkAnswer(mixedExpression.spanish, mixedExpression)'>Check</a>
+            <a class="waves-effect waves-light btn-large modal-trigger" href="#modal1" v-on:click='checkAnswer(mixedExpression.spanish, mixedExpression)'>Check</a>
             <h1></h1>
             
           </div>
         </div>
         <div v-else>
           <div v-if="mixedExpression.hidden===true">
-            <h2>{{ mixedExpression.spanish }}</h2>
+            <h4>{{ mixedExpression.spanish }}</h4>
 
             <div class="row">
               <div class="col s12">
@@ -133,7 +150,22 @@
               </div>
             </div>
 
-            <a class="waves-effect waves-light btn modal-trigger" href="#modal2" v-on:click='checkAnswer(mixedExpression.english, mixedExpression)'>Check</a>
+            <!-- <div v-if="specialShow === true">
+              <div style="text-align:center">
+                <h6>Special Characters</h6>
+                <div>
+                <span>
+                  <button style="margin:5px" class="btn" v-on:click="insertCharacter(specialCharacters[0])">{{ specialCharacters[0]}}</button>
+                </span>
+                <span>
+                  <button style="margin:5px" class="btn" v-on:click="insertCharacter(specialCharacters[1])">{{ specialCharacters[1]}}</button>
+                </span>
+                </div>
+              </div>
+            </div>
+            <br><br> -->
+
+            <a class="waves-effect waves-light btn-large modal-trigger" href="#modal2" v-on:click='checkAnswer(mixedExpression.english, mixedExpression)'>Check</a>
             <h1></h1>
 
           </div>
@@ -141,10 +173,11 @@
       </div>
       
       <div v-if="typePair === true">
-        <h2>Match each the words with the its correct translation</h2>
+        <h4>Match each the words with the its correct translation.</h4>
+        <br><br>
       </div>
       <div v-if="fiveHidden===true">
-        <div v-for="item in eachFiveArray">
+        <div style="text-align:center" v-for="item in eachFiveArray">
           <div v-if="item.hidden_grid===false">
             <button style="margin:5px"  class="btn"v-on:click="matchingPair(item.english, item.spanish, item)">{{ item.english }}</button>
             <button style="margin:5px"  class="btn"v-on:click="matchingPair(item.spanish, item.english, item)">{{ item.spanish }}</button>
@@ -153,21 +186,17 @@
         </div>
       </div>
       
-      <div v-if="specialShow === true">
-        <div v-for="specialCharacter in specialCharacters">
-          <button style="margin:5px" class="btn" v-on:click="insertCharacter(specialCharacter)">{{ specialCharacter}}</button>
-          
-        </div>
-      </div>
     </div>
 
 <!--     <div v-if="typeListMatch">
       
     </div> -->
     <div v-if="endHidden===true && x === 1">
-      <h2>Choose the correct translation of the word from the following list</h2>
+      <h4>Choose the correct translation of the word from the following list</h4>
+      <br>
       <div style="text-align:center">
-        <h4>{{ currentExpression }}</h4> 
+        <h5>{{ currentExpression }}</h5>
+        <br>
         <div v-for="finalExpression in scrambledFinalExpressions">
           <div v-if="finalExpression.hidden===true">
             <div v-if="endIndex===scrambledFinalExpressions.length">
@@ -194,9 +223,7 @@
     </div>
 
     <div v-if="next_hidden===false && getStarted === false">
-      <h1></h1>
-      <h2></h2>
-      <h3></h3>
+      <br><br><br>
       <a href="/#/courses" class="btn blue darken-5">Back to all courses</a>
     </div>
   </div>
