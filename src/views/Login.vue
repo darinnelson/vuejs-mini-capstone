@@ -57,6 +57,7 @@ export default {
   },
   methods: {
     submit: function() {
+      console.log(this.email, this.password);
       var params = {
         email: this.email,
         password: this.password

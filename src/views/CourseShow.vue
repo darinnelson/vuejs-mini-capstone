@@ -27,7 +27,7 @@
       <div class="modal-content">
         <h4 v-if="correctCheck">Correct!</h4>
         <h4 v-else>Incorrect</h4>
-        <h2 v-if="!correctCheck">The correct answer is: <span>{{ correctAnswer }}</span></h2>
+        <h4 v-if="!correctCheck">The correct answer is: <span>{{ correctAnswer }}</span></h4>
       </div>
       <div class="modal-footer dismissible">
         <a class="modal-close waves-effect waves-green btn-flat">Continue</a>
@@ -38,7 +38,7 @@
       <div class="modal-content">
         <h4 v-if="correctCheck">Correct!</h4>
         <h4 v-else>Incorrect</h4>
-        <h2 v-if="!correctCheck">The correct answer is: <span>{{ correctAnswer }}</span></h2>
+        <h4 v-if="!correctCheck">The correct answer is: <span>{{ correctAnswer }}</span></h4>
       </div>
       <div class="modal-footer">
         <a class="modal-close waves-effect waves-green btn-flat">Continue</a>
@@ -71,7 +71,7 @@
 
           <div class="row">
             <div class="col s12">
-              <h4 style="text-align:center; margin:bottom:25px">{{ initialExpression.english}} - {{initialExpression.spanish}}</h4>
+              <h4 style="text-align:center; margin:bottom:25px">{{ initialExpression.spanish}} - {{initialExpression.english}}</h4>
               <br><br>
             </div>
             <div class="col s12" style="text-align: right;">
@@ -107,8 +107,8 @@
                 <div class="row">
                   <div class="input-field col s12">
                     <!-- <i class="material-icons prefix">textsms</i> -->
-                    <input type="text" id="autocomplete-input" class="autocomplete" v-model="attempt">
-                    <label for="autocomplete-input">Type the translation here</label>
+                    <input type="text" v-model="attempt">
+                    <label>Type the translation here</label>
                   </div>
                 </div>
               </div>
@@ -143,8 +143,8 @@
                 <div class="row">
                   <div class="input-field col s12">
                     <!-- <i class="material-icons prefix">textsms</i> -->
-                    <input type="text" id="autocomplete-input" class="autocomplete" v-model="attempt">
-                    <label for="autocomplete-input">Type the translation here</label>
+                    <input type="text" v-model="attempt">
+                    <label>Type the translation here</label>
                   </div>
                 </div>
               </div>

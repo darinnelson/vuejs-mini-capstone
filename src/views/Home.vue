@@ -24,9 +24,7 @@
             <div class="container">
               <br><br>
               <h1 class="header center teal-text text-lighten-2">Looking to learn some local slang for your travels?</h1>
-              <div class="row center">
-                <h5 class="header col s12 light">A modern responsive front-end framework based on Material Design</h5>
-              </div>
+ 
 <!--               <div class="row center">
                 <h5>Learn slang from over 20 countries!</h5>
               </div> -->
